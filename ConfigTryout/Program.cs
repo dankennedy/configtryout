@@ -35,11 +35,18 @@ public static class Program
                     sqlConfig.Prefix = "WorkerSettings";
                 });
                 
+                configApp.AddAzureBlobJson(blobConfig =>
+                {
+                    blobConfig.ConnectionString = hostContext.Configuration.GetConnectionString("Storage");
+                    blobConfig.RefreshInterval = TimeSpan.FromSeconds(10);
+                    blobConfig.BlobPath = "content/Config/WorkerSettings.json";
+                });
+                
                 hostBuilderContext = hostContext;
             })
             .UseDefaultServiceProvider(config =>
             {
-                var validate = hostBuilderContext.HostingEnvironment.IsDevelopment();
+                var validate = hostBuilderContext?.HostingEnvironment.IsDevelopment() ?? false;
                 config.ValidateScopes = validate;
                 config.ValidateOnBuild = validate;
             })

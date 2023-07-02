@@ -1,8 +1,10 @@
-# SQL Configuration Source
+# Additional Configuration Sources
 
-This is a spike to test using a SQL based IConfiguration source which can be used to replace our current, attribute based config set up
+This is a spike to test using a SQL based IConfiguration source and one based on JSON files located on Azure.
 
-## Features
+## SQL Configuration Source
+
+### Features
 
 - It can refresh at a predefined interval
 - Supports nested complex types
@@ -14,7 +16,7 @@ This is a spike to test using a SQL based IConfiguration source which can be use
 - Hierarchical sources are still honoured e.g. appsettings -> appsettings.Environment -> Environment Variables -> Command Line -> Database
 - Systems should use their own database wherever possible to store these values rather than coming back to a central db i.e. CmacCrm
 
-## Setup
+### Setup
 
 You need to create a database and table to store the config settings
 
@@ -43,6 +45,36 @@ SELECT N'WorkerSettings:NestedSettings:Prop2', N'also from db' UNION ALL
 SELECT N'WorkerSettings:Prop1', N'From database'
 GO
 ```
+
+## Azure Blob Json File Configuration Source
+
+### Features
+
+- It can check for updates and refresh at a predefined interval
+- Almost identical to the Json file/app settings configuration source which update checks
+- Can read connection strings defined in earlier configuration sources
+- Hierarchical sources are still honoured e.g. appsettings -> appsettings.Environment -> Environment Variables -> Command Line -> Database
+
+### Setup
+
+You need to create a storage account and container to store the config settings. You need both the connection string and the container name and the blob name/path. The first entry in the path is assumed to be the container name.
+
+We can then create a file pretty much identical to the appsettings.
+
+```json
+{
+  "WorkerSettings": {
+    "IsEnabled": true,
+    "NestedSettings": {
+      "Prop2": "this is the prop2 value from blob",
+      "DicProp": {
+        "xx": "yy"
+      }
+    }
+  }
+}
+```
+
 
 ## Key Points
 

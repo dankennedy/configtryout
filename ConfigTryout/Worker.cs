@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -10,7 +8,7 @@ public class Worker : IHostedService
 {
     private readonly IConfiguration _configuration;
     private readonly IOptionsMonitor<WorkerSettings> _monitorSettings;
-    private Timer? _timer;
+    private Timer _timer;
     
     public Worker(IConfiguration configuration, IOptionsMonitor<WorkerSettings> monitorSettings)
     {
